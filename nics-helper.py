@@ -1066,7 +1066,7 @@ Data extracted from output file: {nics['job']['output']}
         if name is not None:
             fname = name
         else:
-            fname = os.path.splitext(nics['job']['output'])[0] + '.xyz'
+            fname = os.path.splitext(nics['job']['output'])[0] + 'data.xyz'
 
         with open(fname, 'w+') as f:
             f.write(xyzlines)
