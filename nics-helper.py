@@ -790,7 +790,6 @@ def generate_nics(xyzfile: str,
             nics['rings'] = [None]
             nics['provenance']['ringfinder'] = None
 
-    # TODO start here to update for using NICS schema
     # Iterate over rings, build inertial frame(s)
     nics['inertial_frames'] = []
     for ring in nics['rings']:
