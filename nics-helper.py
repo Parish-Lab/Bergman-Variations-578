@@ -282,7 +282,7 @@ def principal_inertial_axis(mol: Molecule,
     return centroid, ev[:,-1]
 
 def place_probe_along_axis(centroid: npt.ArrayLike, axis: npt.ArrayLike, dist: float
-                          ) -> npt.ArrayLike
+                          ) -> npt.ArrayLike:
     """Receives array_like defining centroid & axis and places probe at location `dist`.
 
     Parameters
