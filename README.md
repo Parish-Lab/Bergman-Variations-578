@@ -19,9 +19,11 @@ To use the helper script `nics-helper.py`, first clone this repository to
 your local machine before proceeding to install the required dependencies.
 
 It is recommended that you perform this installation in a new Conda environment
-to protect against version clashes with other Python packages you may have installed
-on your machine. To do this, first download and install [Anaconda]() or [Miniconda](),
-before executing the following from the command line:
+to protect against version clashes with other Python packages you may have
+installed on your machine. To do this, first download and install
+[Anaconda](https://www.anaconda.com/products/distribution) or
+[Miniconda](https://docs.conda.io/en/latest/miniconda.html), before executing
+the following from the command line:
 
 ```bash
 user@host:~$ conda create -n nicshelper python=3.9 qcelemental networkx -c conda-forge
@@ -91,7 +93,7 @@ probes and write them to a new XYZ file for visualization:
 ```
 
 Executing this command in the top-level repository directory of your clone will
-generate the file `pbenzyne-nicsviz.xyz`, with the following contents:
+generate the file `samples/pbenzyne-nicsviz.xyz`, with the following contents:
 
 ```
 13
@@ -112,25 +114,25 @@ He                    0.000000000000     0.000000000000     1.000000002404
 ```
 
 Here, the NICS probes are represented as He atoms to facilitate their
-visualization in a GUI (e.g., [IQMol]()).
+visualization in a GUI (e.g., [IQMol](http://iqmol.org/downloads.html)).
 
-*Note*: Probes are not internally labeled (i.e., as corresponding to NICS(-1),
-NICS(0), NICS(+1), etc.probe); however they are _always_ added/printed in
-ascending order. So, in the XYZ file above, NICS(-1) is printed first, above
-NICS(0), and finally above NICS(+1).
+>*Note*: Probes are not internally labeled (i.e., as corresponding to NICS(-1),
+>NICS(0), NICS(+1), etc.probe); however they are _always_ added/printed in
+>ascending order. So, in the XYZ file above, NICS(-1) is printed first, above
+>NICS(0), and finally above NICS(+1).
 
 #### Example 02: Generate a Gaussian16 input file for NICS computation on _p_-benzyne
 
 If you want to do more than just _place_ NICS probes, never fear!
 `nics-helper.py` can generate both Gaussian16 and Q-Chem input files for NICS
-computations. Let's generate the Gaussian input file for our cyclic diradical,
-_p_-benzyne:
+computations. To demonstrate this capability, let's generate the Gaussian input
+file for our cyclic diradical, _p_-benzyne:
 
 ```bash
 (nicshelper) user@host:~/path/to/repo$ python nics-helper.py -g samples/pbenzyne.xyz -r isosimple -f g16 -c 0 1 -m BS-UB3LYP/6-311++G** -l samples/
 ```
 
-This will generate the following input file, stored in `samples/pbenzyne_geom-BSUB3LYP_6-311ppGss_nics.com`:
+This will generate the following input file, written to `samples/pbenzyne_geom-BSUB3LYP_6-311ppGss_nics.com`:
 
 ```
 %chk=pbenzyne_geom-BSUB3LYP_6-311ppGss_nics.chk
@@ -164,12 +166,14 @@ this is accomplished with the `guess=(mix,always)` option.
 >singlet electronic configuration for your NICS job:
 >    * You _must_ use Gaussian to perform the NICS computations, and
 >    * You _must_ request the broken symmetry approach by prepending `BS-` onto
->    the level of theory (combination of method/basis set) provided to the
->    `--modelchem` option.
+>    the level of theory (combination of method/basis set) passed to the
+>    `--modelchem` command-line option of `nics-helper.py.
+>
 >Otherwise, the computation will produce garbage results!
 
->Note: The `scf=qc` option changes the SCF convergence algorithm to one which
->is more robust, and therefore more likely to converge (albeit slightly more slowly).
+>Note: The `scf=qc` option changes the SCF convergence algorithm to one which is
+>more robust than the default, and therefore more likely to converge (albeit
+>slightly more slowly).
 
 #### Example 03: Extracting NICS data from Gaussian output
 
@@ -208,9 +212,10 @@ X     0.0000000000  0.0000000000  1.8897260000  0.1592000000
 
 Here, the fourth column contains the isotropic deshielding values experienced
 at each NICS probe (that is, the negative of the isotropic shielding values
-reported in the output file!), and the probe symbol is `X` because the fourth
-column breaks XYZ file format sufficiently to nullify opening it in a GUI.
-These deshielding values indicate the relative aromaticity of the molecule:
+reported in the output file!). Additionally, the probe symbol is `X` because
+the fourth column breaks XYZ file format sufficiently to nullify opening it in
+a GUI.  These deshielding values indicate the relative aromaticity of the
+molecule:
 * `deshielding` < -5 : Aromatic
 * -5 <= `deshielding` <= 5 : Non-aromatic
 * 5 < `deshielding` : Anti-aromatic
