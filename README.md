@@ -10,6 +10,29 @@ Enjoy!
 
 ~~ The Authors
 
+**Please use the following citation when referencing this article and/or using
+this software:**
+
+
+## Motivation
+
+As discussed in both the manuscript and Supplemental Information for this work,
+while NICS is a very useful index to assess the aromaticity of a molecular
+system, it is unfortunately sensitive to the location at which the probes are
+placed. Furthermore, for the non-symmetric, non-planar cyclic molecules
+examined here, conventional NICS probe locations are not well-defined.
+Therefore, we have developed a robust, general approach to place NICS probes
+for even non-symmetric and non-planar molecules utilizing the principal moment
+of inertia of the non-mass--weighted ring atoms. In addition to being
+applicable to a more diverse set of molecules, this approach enjoys
+self-consistency with the previous literature leveraging NICS because it
+reproduces the conventional probe locations for planar, symmetric molecules by
+construction.
+
+## Theory
+
+Do we want an overview of the theory here? Or is it just sufficient to refer to
+Section I.G of the SI where I derive it?
 
 ## Using the `nics-helper.py` Script
 
