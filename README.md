@@ -1,4 +1,4 @@
-Variations on the Bergman Cyclization Theme: Electrocyclizations of Penta-, Hepta-, and Octa-Diynes
+_Supplementary Material for_ Variations on the Bergman Cyclization Theme: Electrocyclizations of Penta-, Hepta-, and Octa-Diynes
 ===================================================================================================
 
 Welcome to the supplementary repository for the 5-7-8 project! Here, we make
