@@ -282,8 +282,8 @@ def principal_inertial_axis(mol: Molecule,
     return centroid, ev[:,-1]
 
 def place_probe_along_axis(centroid: npt.ArrayLike, axis: npt.ArrayLike, dist: float
-                          ) -> npt.NDArray[float]:
-    """Receives array_like defining centroid & axis and places probe at location `loc`.
+                          ) -> npt.ArrayLike
+    """Receives array_like defining centroid & axis and places probe at location `dist`.
 
     Parameters
     ----------
@@ -297,7 +297,7 @@ def place_probe_along_axis(centroid: npt.ArrayLike, axis: npt.ArrayLike, dist: f
     Returns
     -------
     probe : npt.ArrayLike
-        (1,3) point in Cartesian space (<x, y, z>) where probe is to be placed.
+        Shape (1,3) point in Cartesian space (<x, y, z>) where probe is to be placed.
     """
     # From `centroid`, go `dist` along `axis` to generate probe location
     probe = centroid + (axis * dist)
@@ -324,28 +324,11 @@ def augment(mol: Molecule, centroid: npt.ArrayLike, axis: npt.ArrayLike,
             - `'IsoZScan'` : Scan along axis for isotropic shielding at [1.0, 5.0, 0.1]
     loc : npt.ArrayLike or NoneType, default=None
         Explicit locations at which to place NICS probes. Does not have to be along `axis`.
-    write : bool, default=False
-        Write augmented molecule to XYZ file?
-    filename : str, default='nics.xyz'
-        Name of XYZ file to write augmented molecule to
-    probe_symbol : {'X', 'GH', 'He'}
-        Symbol to define NICS probe(s) in XYZ file. See note 1 below for details on options.
-    dtype : {'xyz+', 'xyz'}
 
     Returns
     -------
     augmented : Molecule
         Molecule object augmented with NICS probes.
-
-    Notes
-    -----
-    1. The appropriate probe symbol will depend on the downstream use of the XYZ file.
-    Possible applications & recommended symbols:
-        - Internal/Psi4/QCElemental format: 'X'
-        - Q-Chem format: 'GH'
-        - Visualization with IQMol: 'He'
-    2. This version of the function works by generating an intermediate molstr representation,
-    instead of augmenting a schema & remaking a mol directly. Not my circus, not my monkeys.
     """
     # Sanity check: are there either a recipe and/or explicit locations passed?
     if recipe is None and loc is None:
@@ -441,7 +424,7 @@ def sanitize_augmented(augmented: Molecule, probe_symbol: str = 'He', dtype='xyz
 
     # Make molrec dict for passing -> to_string()
     molrec['geom'] = np.asarray(geom_list)
-    # to_string() needs this extra bullshit
+    # to_string() needs this extra stuff
     molrec['elea'] = [-1] * len(symbols_list)
     molrec['elez'] = [-1] * len(symbols_list)
     molrec['mass'] = [-1] * len(symbols_list)
@@ -465,7 +448,7 @@ def aug2xyz(augmented: Molecule, probe_symbol: str = 'He', write: Union[str,None
     ----------
     augmented : Molecule
         Molecule augmented with NICS probes for which to write to file.
-    probe_symbol : {'He', 'GH', 'X'}
+    probe_symbol : {'He', 'X'}
         Symbol to define NICS probe(s) in XYZ file. 
     write : Union[str, None], default=None
         Do the writing here?
@@ -474,14 +457,6 @@ def aug2xyz(augmented: Molecule, probe_symbol: str = 'He', write: Union[str,None
     ------- 
     str
         Contents of XYZ file for preservation
-
-    Notes
-    -----
-    1. The appropriate probe symbol will depend on the downstream use of the XYZ file.
-    Possible applications & recommended symbols:
-        - Visualization with IQMol: 'He'
-        - Q-Chem format: 'GH'
-        - Internal/Psi4/QCElemental format: 'X'
     """
     # Sanitize molecule for writing to XYZ; see Note 1 above
     molstr = sanitize_augmented(augmented, probe_symbol=probe_symbol, dtype='xyz')
@@ -523,11 +498,8 @@ def prep_g16_input(mol: Molecule,
 
     Returns
     -------
-    nmrjob : str
+    inpstr : str
         Contents of input file for computing NICS at desired level-of-theory.
-    bsjob : str or None
-        Contents of input file for preparing initial broken-symmetry wavefunction/density at desired
-        level-of-theory.
 
     Raises
     ------
@@ -688,7 +660,7 @@ NO_REORIENT           1
 
     return inpstr
 
-def prep_input(augmented, qcng: str, **kwargs) -> Union[str, Tuple[str]]:
+def prep_input(augmented, qcng: str, **kwargs) -> str:
     """Function to prepare input file for running NICS computation with various QC engines.
 
     Parameters
@@ -702,12 +674,8 @@ def prep_input(augmented, qcng: str, **kwargs) -> Union[str, Tuple[str]]:
 
     Returns
     -------
-    Union[str, Tuple[str]]
+    str
         String repr of the input file(s) contents, formatted for QC engine `qcng`
-    
-    Notes
-    -----
-    If G16 engine is requested and , *two* inputs will be returned
     """
     if qcng == 'qchem':
         return prep_qchem_input(augmented, **kwargs)
