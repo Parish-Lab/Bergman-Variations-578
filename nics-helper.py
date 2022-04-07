@@ -1,4 +1,4 @@
-"""Generate & place probes for NICS computation."""
+"""Streamlining the generation & analysis of NICS computations."""
 
 __author__ = "Dominic A. Sirianni, PhD"
 __email__ = "sirianni.dom@gmail.com"
@@ -612,6 +612,9 @@ $end"""
     # Check whether there are NICS probes in molecule
     if 'X' not in mol.dict()['symbols']:
         raise Exception("No NICS probes in molecule! Exiting.")
+
+    # Warn that diradicals etc. are really not supported with Q-Chem
+    warnings.warn("Warning: If your molecule is even possibly muticonfigurational (diradical character, transition state, etc.), BEWARE! Q-Chem does not currently support spin-flip, broken symmetry, etc. in combination with NICS. Proceed at your own risk!")
 
     # Build molecule block
     molstr = '\n'.join(sanitize_augmented(mol, probe_symbol='GH').split('\n')[2:-1])
