@@ -1,0 +1,31 @@
+$comment
+{reactant}-->{product} scan at xi = {xi}
+SF-TDDFT(50/50)/cc-pVDZ energy
+$
+
+$molecule
+{charge} {multiplicity}
+{molstr}
+$end
+
+$rem
+JOB_TYPE                    SP
+METHOD                B5050LYP
+BASIS                  cc-pVDZ
+SCF_CONVERGENCE              8
+SCF_ALGORITHM         DIIS_GDM
+MAX_SCF_CYCLES             200
+UNRESTRICTED                 1
+SPIN_FLIP                 TRUE
+CIS_N_ROOTS                  1
+CIS_STATE_DERIV              1
+SET_STATE_DERIV              1
+CIS_CONVERGENCE             10
+MAX_CIS_CYCLES             200
+new_dft                   TRUE
+nto_pairs                    4
+PRINT_ORBITALS            TRUE
+GUI                          2
+MEM_TOTAL                 6000
+$end
+
