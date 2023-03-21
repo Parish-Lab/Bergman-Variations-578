@@ -130,3 +130,15 @@ dmypy.json
 # Sample outputs
 *nicsviz.xyz
 *nicsdata.xyz
+
+# LaTeX intermediates
+*.aux
+*.bbl
+*.blg
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.synctex.gz
+*Notes.bib
