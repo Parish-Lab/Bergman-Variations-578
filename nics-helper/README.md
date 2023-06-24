@@ -18,8 +18,9 @@ construction.
 
 ## Theory
 
-Do we want an overview of the theory here? Or is it just sufficient to refer to
-Section I.G of the SI where I derive it?
+For the details related to the derivation and development of the general approach
+for placing isotropic NICS probes automated here, please refer to Section S-I.B
+of the Supporting Information.
 
 ## Using the `nics-helper.py` Script
 
@@ -229,5 +230,6 @@ molecule:
 * `deshielding` < -5 : Aromatic
 * -3 <= `deshielding` <= 3 : Non-aromatic
 * 5 < `deshielding` : Anti-aromatic
+
 
 

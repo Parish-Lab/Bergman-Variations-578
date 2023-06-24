@@ -317,11 +317,11 @@ def augment(mol: Molecule, centroid: npt.ArrayLike, axis: npt.ArrayLike,
         Ring centroid to use as origin for inertial system & NICS probe placement
     axis : npt.ArrayLike
         Axis along which to place NICS probes.
-    recipe : {None, 'IsoSimple', 'IsoZScan'}
+    recipe : {None, 'IsoSimple', 'IsoZScan', 'IsoXYScan'}
         Recipe by which to place NICS probes
         Options:
-            - `'IsoSimple'` : NICS(0) + NICS(-1) + NICS(+1)
-            - `'IsoZScan'` : Scan along axis for isotropic shielding at [1.0, 5.0, 0.1]
+            - `'IsoSimple'` : NICS(0) & NICS(-1) & NICS(+1)
+            - `'IsoZScan'`  : Scan along axis for isotropic shielding at [1.0, 5.0, 0.1]
     loc : npt.ArrayLike or NoneType, default=None
         Explicit locations at which to place NICS probes. Does not have to be along `axis`.
 
@@ -519,7 +519,9 @@ def prep_g16_input(mol: Molecule,
         raise Exception(f"No NICS probes in molecule {mol.name}! Exiting.")
 
     # Build molstrings for different input files
-    auglines = sanitize_augmented(mol, probe_symbol='Bq').split('\n')[2:-1]
+    auglines = aug2xyz(mol, probe_symbol='He').replace('He','Bq').split('\n')[2:-1]
+
+    # Zip aug to molstr
     aug_molstr = '\n'.join(auglines)
 
     # Build broken symmetry job?
@@ -772,6 +774,15 @@ def generate_nics(xyzfile: str,
         # Generate NICS from centroid along axis
         tmpmol = augment(tmpmol, frame['C'], frame['axis'], **nicskw)
     nics['augmented'] = tmpmol
+
+    # TODO: XY scan between centroids at given z height
+    # a = <x_i, y_i, z_i>; b = <x_f, y_f, z_f>
+    # xyscan = []
+    # for i in range(0,1,0.1):
+    #     xy.append(a + i * (b-a))
+    # 
+    # Idea: surface interpolation of molecular structure, roll along surface
+    # to preserve curvature of molecule in scan
 
     # Write data?
     if write is None:
